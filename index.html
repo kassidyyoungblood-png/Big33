@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy 33 Birthday Ben!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0b10;
+            --neon-blue: #00d2ff;
+            --neon-white: #ffffff;
+            --card-height: 380px;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        /* Particles */
+        .particle {
+            position: fixed;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+            50% { opacity: 0.5; }
+            100% { transform: translateY(-10vh) translateX(100px); opacity: 0; }
+        }
+
+        header { text-align: center; margin-bottom: 60px; }
+        
+        h1 { 
+            font-family: 'Orbitron', sans-serif; 
+            font-size: 3rem; 
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin: 0;
+            color: var(--neon-white);
+            text-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .day-label {
+            width: 100%; max-width: 1000px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem; margin: 40px 0 20px 0;
+            color: var(--neon-blue);
+            border-left: 4px solid var(--neon-blue);
+            padding-left: 15px;
+        }
+
+        .vision-board {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            width: 100%;
+            max-width: 1000px;
+            perspective: 1500px;
+        }
+
+        /* Card Mechanics */
+        .card-container { 
+            height: var(--card-height); 
+            cursor: pointer; 
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+            -webkit-transform-style: preserve-3d;
+        }
+
+        .card-container.is-flipped .card-inner { transform: rotateY(180deg); }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid rgba(0, 210, 255, 0.2);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Hover Effects */
+        .card-container:hover .card-front,
+        .card-container:hover .card-back {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 25px rgba(0, 210, 255, 0.5);
+        }
+
+        .card-container:hover .card-bg {
+            transform: scale(1.05);
+        }
+
+        /* Front Side Styling */
+        .card-front { 
+            background: #000; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: flex-end; 
+            transform: rotateY(0deg) translateZ(1px); /* Fixed Mirroring */
+            z-index: 2;
+        }
+
+        .card-bg { 
+            position: absolute; 
+            top: 0; left: 0; width: 100%; height: 100%; 
+            background-size: cover; 
+            background-position: center; 
+            filter: brightness(0.6); 
+            z-index: 1;
+            transition: transform 0.5s ease;
+        }
+
+        .card-content-front {
+            position: relative;
+            z-index: 2;
+            padding: 25px;
+            background: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 50%, transparent 100%);
+        }
+
+        .card-content-front h3 { 
+            font-family: 'Orbitron', sans-serif; 
+            font-size: 1.4rem; 
+            margin: 0; 
+            color: #ffffff;
+            text-shadow: 2px 2px 4px rgba(0,0,0,1);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Back Side Styling */
+        .card-back {
+            background-color: #0d0e14;
+            color: #fff;
+            transform: rotateY(180deg) translateZ(1px); /* Fixed Mirroring */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            box-sizing: border-box;
+            border: 2px solid var(--neon-blue);
+        }
+
+        .card-back h3 { color: var(--neon-blue); font-family: 'Orbitron', sans-serif; margin-bottom: 10px; text-transform: uppercase; }
+        .card-back p { text-align: center; font-size: 0.9rem; line-height: 1.5; color: #ddd; margin-bottom: 25px; }
+
+        .directions-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--neon-blue);
+            color: #000;
+            padding: 12px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+        }
+
+        .directions-link svg { fill: currentColor; }
+        .directions-link:hover { box-shadow: 0 0 15px var(--neon-blue); transform: scale(1.05); }
+
+        @media (max-width: 600px) { h1 { font-size: 2rem; } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>CELEBRATING 33 YEARS</h1>
+        <p style="color: var(--neon-blue); letter-spacing: 2px;">BIRTHDAY ITINERARY</p>
+    </header>
+
+    <div class="day-label">MAY 16 // SATURDAY</div>
+    <div class="vision-board">
+        <div class="card-container" onclick="handleFlip(this, event)">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="card-bg" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-KtQpxwxJgTuSUJ4xi-HcDbC25LCwA0RBq3S5mMmOGXDZAACyx55qrzJCIU3Y2uK5xCXthm8rXWsoib39v3GVotlFkJbt5irQullaIg&s=10');"></div>
+                    <div class="card-content-front"><h3>Brunch - 10:30</h3></div>
+                </div>
+                <div class="card-back">
+                    <h3>First Watch</h3>
+                    <p>Classic and sweet, just like you.</p>
+                    <a href="https://maps.app.goo.gl/AHtM8McgVgk9WvQF8" target="_blank" class="directions-link">
+                        <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                        Navigate
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-container" onclick="handleFlip(this, event)">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="card-bg" style="background-image: url('https://images.unsplash.com/photo-1511512578047-dfb367046420?w=500');"></div>
+                    <div class="card-content-front"><h3>Arcade - 12:00 </h3></div>
+                </div>
+                <div class="card-back">
+                    <h3>Arkadia Retrocade</h3>
+                    <p>$5. All you can play.</p>
+                    <a href="https://maps.app.goo.gl/TyDXrSBuQG8qHUiT9" target="_blank" class="directions-link">
+                        <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                        Navigate
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-container" onclick="handleFlip(this, event)">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="card-bg" style="background-image: url('https://static.wixstatic.com/media/e0d922_b45867181eee4d69b4162c2b8b2b4813~mv2.png/v1/fill/w_950,h_950,al_c,q_90,usm_0.66_1.00_0.01,enc_auto/e0d922_b45867181eee4d69b4162c2b8b2b4813~mv2.png');"></div>
+                    <div class="card-content-front"><h3>Escape Room - 1:45</h3></div>
+                </div>
+                <div class="card-back">
+                    <h3>King of the Rings</h3>
+                    <p>You have kept your uncle's ring a secret for 17 years. Now a wizard tells you your life depends on taking it and fleeing your home before the enemy spies arrive. But first - you have to find it!</p>
+                    <a href="https://maps.app.goo.gl/8N1v3DaECzW6tCPc6" target="_blank" class="directions-link">
+                        <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                        Navigate
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-container" onclick="handleFlip(this, event)">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="card-bg" style="background-image: url('https://lh3.googleusercontent.com/p/AF1QipOPTwCsZOeqUvaBCjXPTtSSMfv0AffA6K88oJw=s1360-w1360-h1020-rw');"></div>
+                    <div class="card-content-front"><h3>Hotel - 3:00</h3></div>
+                </div>
+                <div class="card-back">
+                    <h3>The Star on Spring</h3>
+                    <p>Base camp for the night.</p>
+                    <a href="https://maps.app.goo.gl/5LmNzFivVxdks3837" target="_blank" class="directions-link">
+                        <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                        Navigate
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-container" onclick="handleFlip(this, event)">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="card-bg" style="background-image: url('https://s3-media0.fl.yelpcdn.com/bphoto/_88qRz6ieE_sk_ok4XD46g/348s.jpg');"></div>
+                    <div class="card-content-front"><h3>Dinner - 4:00</h3></div>
+                </div>
+                <div class="card-back">
+                    <h3>Pick One</h3>
+                    <p>1. Bauhaus Biergarten 2. Kin Zabb Thai and Sushi 3. Casa Alejo</p>
+                    <a href="https://maps.app.goo.gl/DBngZcDuaBxXMctQ7" target="_blank" class="directions-link">
+                        <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                        Navigate
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-container" onclick="handleFlip(this, event)">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="card-bg" style="background-image: url('https://www.nwahomepage.com/wp-content/uploads/sites/90/2015/06/Story_2156945_ver1.0.jpg?strip=1&w=640');"></div>
+                    <div class="card-content-front"><h3>Demolition Derby - 6:30</h3></div>
+                </div>
+                <div class="card-back">
+                    <h3>Rodeo of the Ozarks</h3>
+                    <p>Metal-crunching finale. Doors open at 5. </p>
+                    <a href="https://maps.app.goo.gl/Ckq5zf87XfK8dU8AA" target="_blank" class="directions-link">
+                        <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                        Navigate
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="day-label">MAY 17 // SUNDAY</div>
+    <div class="vision-board">
+        <div class="card-container" onclick="handleFlip(this, event)">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="card-bg" style="background-image: url('https://cdn.shopify.com/s/files/1/1707/3261/files/IMG_7266-Enhanced-NR.jpg?v=1739288208');"></div>
+                    <div class="card-content-front"><h3>Coffee</h3></div>
+                </div>
+                <div class="card-back">
+                    <h3>Onxy Coffee Lab</h3>
+                    <p>The obvious choice, just like you.</p>
+                    <a href="https://maps.app.goo.gl/2tetJeTigixBr1gd9" target="_blank" class="directions-link">
+                        <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                        Navigate
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-container" onclick="handleFlip(this, event)">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="card-bg" style="background-image: url('https://thetoastedyolk.com/wp-content/uploads/2024/04/The-Toasted-Yolk-Cafe-Avocado-Toast.jpg');"></div>
+                    <div class="card-content-front"><h3>Breakfast</h3></div>
+                </div>
+                <div class="card-back">
+                    <h3>The Toasted Yolk Cafe</h3>
+                    <p>French toast and mimosas??</p>
+                    <a href="https://maps.app.goo.gl/YiFcaNFRYX1dUqPeA" target="_blank" class="directions-link">
+                        <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                        Navigate
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-container" onclick="handleFlip(this, event)">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="card-bg" style="background-image: url('https://dynamic-media-cdn.tripadvisor.com/media/photo-o/26/8e/75/ac/fayetteville-s-funky.jpg?w=1100&h=1100&s=1');"></div>
+                    <div class="card-content-front"><h3>Perusing</h3></div>
+                </div>
+                <div class="card-back">
+                    <h3>Once Upon a Time Books & Fayetteville's Funky Flea Market</h3>
+                    <p>Let's go shoppin'!</p>
+                    <a href="https://maps.app.goo.gl/BLr7qpdi1MC13XcG6" target="_blank" class="directions-link">
+                        <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                        Navigate
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-container" onclick="handleFlip(this, event)">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="card-bg" style="background-image: url('https://images.untp.beer/crop?width=640&height=640&stripmeta=true&url=https://untappd.s3.amazonaws.com/photos/2024_04_26/357258c8b7b2161970ca7d7b7f25ae53_c_1375365595_raw.jpg');"></div>
+                    <div class="card-content-front"><h3>Brewery</h3></div>
+                </div>
+                <div class="card-back">
+                    <h3>Fayetteville Beer Works</h3>
+                    <p>Flights!</p>
+                    <a href="https://maps.app.goo.gl/xgyQaNLHQSaT3ty6A" target="_blank" class="directions-link">
+                        <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                        Navigate
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Flip Mechanic - Ignores clicks on buttons
+        function handleFlip(card, event) {
+            if (event.target.closest('.directions-link')) {
+                return;
+            }
+            card.classList.toggle('is-flipped');
+        }
+
+        // Background Atmosphere
+        for (let i = 0; i < 25; i++) {
+            let p = document.createElement('div');
+            p.className = 'particle';
+            p.style.width = Math.random() * 5 + 'px';
+            p.style.height = p.style.width;
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            p.style.animationDelay = (Math.random() * 5) + 's';
+            document.body.appendChild(p);
+        }
+    </script>
+</body>
+</html>
